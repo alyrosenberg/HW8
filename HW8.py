@@ -6,6 +6,7 @@ import json
 import re
 import tweepy
 import twitter_info # still need this in the same directory, filled out
+import pprint
 
 consumer_key = twitter_info.consumer_key
 consumer_secret = twitter_info.consumer_secret
@@ -13,6 +14,7 @@ access_token = twitter_info.access_token
 access_token_secret = twitter_info.access_token_secret
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
+pp = pprint.PrettyPrinter(indent=4)
 
 # Set up library to grab stuff from twitter with your authentication, and return it in a JSON format
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
@@ -21,9 +23,9 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 CACHE_FNAME = "twitter_cache.json"
 try:
     cache_file = open(CACHE_FNAME,'r')
-        cache_contents = cache_file.read()
-        cache_file.close()
-        CACHE_DICTION = json.loads(cache_contents)
+    cache_contents = cache_file.read()
+    cache_file.close()
+    CACHE_DICTION = json.loads(cache_contents)
 except:
     CACHE_DICTION = {}
 
@@ -33,10 +35,19 @@ except:
 # Your function must cache data it retrieves and rely on a cache file!
 
 
-def get_tweets():
-##YOUR CODE HERE
-
-
+def get_tweets(keyword="umsi"):
+    if keyword in CACHE_DICTION:
+        return CACHE_DICTION[keyword]
+    else:
+        public_tweets = api.search(q=keyword) #look if theres an option for case insensitive
+        textandtime = []
+        for i in range(0, len(textandtime)-1):
+            firstfive[textandtime[i]] = textandtime[i + 1]
+        CACHE_DICTION[keyword] = public_tweets
+        writefile = open(CACHE_FNAME,"w")
+        writefile.write(json.dumps(CACHE_DICTION))
+        writefile.close()
+    return public_tweets
 
 ## [PART 2]
 # Create a database: tweets.sqlite,
@@ -50,13 +61,13 @@ def get_tweets():
 # Below we have provided interim outline suggestions for what to do, sequentially, in comments.
 
 # 1 - Make a connection to a new database tweets.sqlite, and create a variable to hold the database cursor.
-
-
+conn = sqlite3.connect('twitter.sqlite')
+cur = conn.cursor()
 # 2 - Write code to drop the Tweets table if it exists, and create the table (so you can run the program over and over), with the correct (4) column names and appropriate types for each.
 # HINT: Remember that the time_posted column should be the TIMESTAMP data type!
-
+cur.execute('DROP TABLE IF EXISTS umsi')
+cur.execute('CREATE TABLE umsi (tweet_id TEXT, author TEXT, time_posted TIMESTAMP, tweet_text TEXT, retweets INTEGER)')
 # 3 - Invoke the function you defined above to get a list that represents a bunch of tweets from the UMSI timeline. Save those tweets in a variable called umsi_tweets.
-
 
 # 4 - Use a for loop, the cursor you defined above to execute INSERT statements, that insert the data from each of the tweets in umsi_tweets into the correct columns in each row of the Tweets database table.
 
@@ -79,6 +90,15 @@ def get_tweets():
 # Print the results
 
 
-
 if __name__ == "__main__":
+    # tweets = get_tweets()['statuses']
+    # testtweet = tweets[1]
+    # print (testtweet["id"])
+    # print (testtweet["user"]["name"])
+    # print (testtweet["created_at"])
+    # print (testtweet["text"])
+    # print (testtweet["retweet_count"])
+    # for i,tweet in enumerate(tweets):
+    #     if i == 0:
+    #         pp.pprint(tweet)
     unittest.main(verbosity=2)

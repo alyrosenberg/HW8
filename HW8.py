@@ -114,19 +114,7 @@ for row in cur:
 print (more_than_2_rts)
 
 
-
-
 cur.close()
 
 if __name__ == "__main__":
-    # tweets = get_tweets()['statuses']
-    # testtweet = tweets[1]
-    # print (testtweet["id"])
-    # print (testtweet["user"]["name"])
-    # print (testtweet["created_at"])
-    # print (testtweet["text"])
-    # print (testtweet["retweet_count"])
-    # for i,tweet in enumerate(tweets):
-    #     if i == 0:
-    #         pp.pprint(tweet)
     unittest.main(verbosity=2)

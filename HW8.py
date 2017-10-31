@@ -48,18 +48,6 @@ def get_tweets(keyword="umsi"):
         writefile.write(json.dumps(CACHE_DICTION))
         writefile.close()
     return public_tweets
-
-# def get_tweets2(keyword = "umsi"):
-#     if keyword in CACHE_DICTION:
-#         return CACHE_DICTION[keyword]
-#     else:
-#         umsitweets = api.user_timeline(screen_name = 'umsi')
-#         CACHE_DICTION[keyword] = public_tweets
-#         writefile = open(CACHE_FNAME,"w")
-#         writefile.write(json.dumps(CACHE_DICTION))
-#         writefile.close()
-#     return umsitweets
-
 ## [PART 2]
 # Create a database: tweets.sqlite,
 # And then load all of those tweets you got from Twitter into a database table called Tweets, with the following columns in each row:
@@ -86,7 +74,6 @@ for tweet in umsi_tweets:
     conn.commit()
 
 #  5- Use the database connection to commit the changes to the database
-
 # You can check out whether it worked in the SQLite browser! (And with the tests.)
 
 ## [PART 3] - SQL statements

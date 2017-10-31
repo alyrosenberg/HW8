@@ -35,7 +35,6 @@ except:
 # Your function must cache data it retrieves and rely on a cache file!
 
 #api.user_timeline(screen_name = 'umsi')
-
 def get_tweets(keyword="umsi"):
     if keyword in CACHE_DICTION:
         return CACHE_DICTION[keyword]
@@ -71,7 +70,6 @@ def get_tweets(keyword="umsi"):
 ## retweets - containing the number that represents how many times the tweet has been retweeted
 
 # Below we have provided interim outline suggestions for what to do, sequentially, in comments.
-
 # 1 - Make a connection to a new database tweets.sqlite, and create a variable to hold the database cursor.
 conn = sqlite3.connect('twitter.sqlite')
 cur = conn.cursor()
@@ -79,10 +77,8 @@ cur = conn.cursor()
 # HINT: Remember that the time_posted column should be the TIMESTAMP data type!
 cur.execute('DROP TABLE IF EXISTS umsi')
 cur.execute('CREATE TABLE umsi (tweet_id TEXT, author TEXT, time_posted TIMESTAMP, tweet_text TEXT, retweets INTEGER)')
-
 # 3 - Invoke the function you defined above to get a list that represents a bunch of tweets from the UMSI timeline. Save those tweets in a variable called umsi_tweets.
 umsi_tweets = get_tweets()['statuses'] #this statuses thing might be wrong
-
 # 4 - Use a for loop, the cursor you defined above to execute INSERT statements, that insert the data from each of the tweets in umsi_tweets into the correct columns in each row of the Tweets database table.
 for tweet in umsi_tweets:
     cur.execute('INSERT INTO umsi (tweet_id, author, time_posted, tweet_text, retweets) VALUES (?, ?, ?, ?, ?)',                     
@@ -103,7 +99,6 @@ for tweet in umsi_tweets:
 cur.execute("select time_posted || ' - ' || tweet_text || '\n'  from umsi")
 for row in cur:
     print (row[0])
-
 # Select the author of all of the tweets (the full rows/tuples of information) that have been retweeted MORE
 # than 2 times, and fetch them into the variable more_than_2_rts.
 # Print the results
@@ -112,7 +107,6 @@ cur.execute("select distinct author from umsi where retweets >2")
 for row in cur:
     more_than_2_rts.append(row[0])
 print (more_than_2_rts)
-
 
 cur.close()
 
